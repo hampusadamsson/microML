@@ -19,13 +19,18 @@ model = Model.Model()
 @app.route('/predict', methods=['POST'])
 @cross_origin(origin='*')
 def predict():
-    raw = request.json
-    logger.info("Incoming request", raw)
-    series = pd.Series(raw, raw.keys())
-    res = model.predict(series)
-    print(res)
+    try:
+        raw = request.json
+        logger.info("Incoming request", raw)
+        series = pd.Series(raw, raw.keys())
+        res = model.predict(series)
+        print(res)
+        ans = res.tolist()
+    except Exception as e:
+        logger.error(e)
+        ans = str(e)
     return app.response_class(
-        response=res.tolist(),
+        response=ans,
         status=200,
         mimetype='application/json'
     )

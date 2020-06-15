@@ -17,5 +17,4 @@ class Model:
             self.model = pickle.load(f)
 
     def predict(self, inp):
-        logger.info("Predicting", inp)
         return self.model.predict([inp])
