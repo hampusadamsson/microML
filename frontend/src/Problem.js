@@ -20,7 +20,7 @@ class Problem extends Component {
 
 SubmitSolution(){
   console.log("SENDING DATA");
-  console.log(this.state.input);
+  console.log(this.state.json);
   axios.post(Config.url + "/predict", this.state.json)
   .then(res => {
     console.log(res.data);

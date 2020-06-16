@@ -2,7 +2,7 @@ import json
 import logging
 
 import pandas as pd
-from flask import Flask, request
+from flask import Flask, request, render_template
 from flask_cors import cross_origin
 
 from src import Model
@@ -36,8 +36,12 @@ def predict():
     )
 
 
+@app.route('/')
+def static_():
+    return render_template('index.html')
 
-@app.route('/', methods=['GET'])
+
+@app.route('/health', methods=['GET'])
 @cross_origin(origin='*')
 def health():
     return app.response_class(

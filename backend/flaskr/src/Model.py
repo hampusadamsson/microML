@@ -7,7 +7,7 @@ logging.basicConfig(format='%(asctime)s %(name)-12s %(levelname)-8s %(message)s'
 logger = logging.getLogger('ModelSingleton')
 logger.setLevel(logging.INFO)
 
-path_to_model = "/home/hades/program/microML/microML-backend/microML-model-manager/models/model-sample-Iris-1592248801.3507187.model"
+path_to_model = "/home/hades/program/microML/microML-model-manager/models/model-sample-Iris-1592248801.3507187.model"
 
 
 class Model:
