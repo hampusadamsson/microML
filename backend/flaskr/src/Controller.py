@@ -4,6 +4,7 @@ import logging
 import pandas as pd
 from flask import Flask, request, render_template
 from flask_cors import cross_origin
+from datetime import datetime
 
 from src import Model
 
@@ -22,6 +23,10 @@ def predict():
     try:
         raw = request.json
         logger.info("Incoming request", raw)
+        raw["year"] = datetime.today().strftime('%Y')
+        raw["month"] = datetime.today().strftime('%m')
+        raw["day"] = datetime.today().strftime('%d')
+        print(raw)
         series = pd.Series(raw, raw.keys())
         res = model.predict(series)
         print(res)

@@ -1,13 +1,14 @@
 import logging
 import sklearn
+import xgboost
 
 import pickle
 
 logging.basicConfig(format='%(asctime)s %(name)-12s %(levelname)-8s %(message)s')
-logger = logging.getLogger('ModelSingleton')
+logger = logging.getLogger('Model')
 logger.setLevel(logging.INFO)
 
-path_to_model = "/home/hades/program/microML/microML-model-manager/models/model-sample-Iris-1592248801.3507187.model"
+path_to_model = "/home/hades/program/microML/microML-model-manager/models/model-sample-Hemnet-1592318525.799135.model"
 
 
 class Model:
@@ -17,4 +18,4 @@ class Model:
             self.model = pickle.load(f)
 
     def predict(self, inp):
-        return self.model.predict([inp])
+        return self.model.predict(inp)
