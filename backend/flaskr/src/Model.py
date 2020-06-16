@@ -8,7 +8,7 @@ logging.basicConfig(format='%(asctime)s %(name)-12s %(levelname)-8s %(message)s'
 logger = logging.getLogger('Model')
 logger.setLevel(logging.INFO)
 
-path_to_model = "/home/hades/program/microML/microML-model-manager/models/model-sample-Hemnet-1592318525.799135.model"
+path_to_model = "/home/hades/program/microML/microML-model-manager/models/model-sample-Hemnet-1592321010.42141.model"
 
 
 class Model:

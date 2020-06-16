@@ -81,19 +81,6 @@ render() {
         <br/>
         <input type="range" min="0" max="10" onChange={(e) => {this.handleChange(e)}} className="slider" id="floor" />
 
-        <div class="dropdown">
-          <button class="dropbtn">{this.state.json.typeSummary}</button>
-          <div class="dropdown-content">
-            <a className="dd" onClick={() => {this.changeType('Bostadsrättslägenhet')}}>Bostadsrättslägenhet</a>
-            <a className="dd" onClick={() => {this.changeType('Villa')}}>Villa</a>
-            <a className="dd" onClick={() => {this.changeType('Fritidshus')}}>Fritidshus</a>
-            <a className="dd" onClick={() => {this.changeType('Radhus')}}>Radhus, äganderätt</a>
-            <a className="dd" onClick={() => {this.changeType('Vinterbonat fritidshus')}}>Vinterbonat fritidshus</a>
-            <a className="dd" onClick={() => {this.changeType('Tomt')}}>Tomt</a>
-          </div>
-        </div>
-        <br/>
-
         Land area (<i>{this.state.json.land_area}</i>)
         <br/>
         <input type="text" max="1000000"  onChange={(e) => {this.handleChange(e)}} id="land_area" />

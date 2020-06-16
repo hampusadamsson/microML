@@ -28,14 +28,15 @@ def predict():
         raw["day"] = datetime.today().strftime('%d')
         print(raw)
         series = pd.Series(raw, raw.keys())
+        series = series.astype("float")
         res = model.predict(series)
         print(res)
-        ans = res.tolist()
+        res = res.tolist()
     except Exception as e:
         logger.error(e)
-        ans = str(e)
+        res = str(e)
     return app.response_class(
-        response=ans,
+        response=str(res),
         status=200,
         mimetype='application/json'
     )
