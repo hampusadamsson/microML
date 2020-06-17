@@ -27,9 +27,10 @@ def predict():
         raw["month"] = datetime.today().strftime('%m')
         raw["day"] = datetime.today().strftime('%d')
         print(raw)
-        series = pd.Series(raw, raw.keys())
-        series = series.astype("float")
-        res = model.predict(series)
+        s = pd.DataFrame.from_dict({"row": raw}, orient='index')
+        s = s.reindex(sorted(s.columns), axis=1)
+        s = s.astype("float")
+        res = model.predict(s)
         print(res)
         res = res.tolist()
     except Exception as e:

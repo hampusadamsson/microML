@@ -7,7 +7,8 @@ class Problem extends Component {
   constructor(props){
   super(props);
   this.state = {
-    result: "Response goes here...",
+    "loc": "",
+    result: "",
     json: {
       "rooms": 0,
       "fee": 0,
@@ -20,6 +21,7 @@ class Problem extends Component {
     },
   };
   this.SubmitSolution = this.SubmitSolution.bind(this);
+  this.checkPlace = this.checkPlace.bind(this);
 }
 
 SubmitSolution(){
@@ -46,62 +48,101 @@ handleChange (e) {
     json: inp,
   })}
 
-  changeType(e) {
-    console.log(e);
-    const inp = {...this.state.json}
-    inp["typeSummary"] = e;
-    console.log(inp)
-    this.setState({
-      json: inp,
-    })}
+changeType(e) {
+  console.log(e);
+  const inp = {...this.state.json}
+  inp["typeSummary"] = e;
+  console.log(inp)
+  this.setState({
+    json: inp,
+  })
+}
 
+checkPlace(loc){
+  console.log("checkPlace");
+  const opencage = require('opencage-api-client');
+  opencage.geocode({ q: loc, key: process.env.REACT_APP_OCD_API_KEY})
+    .then(data => {
+      console.log(data);
+      const inp = {...this.state.json}
+      inp["latitude"] = data.results[0].geometry.lng; //lon-lat mixed up
+      inp["longitude"] = data.results[0].geometry.lat; //lon-lat mixed up
+      this.setState({
+        json: inp,
+        loc: data.results[0].formatted,
+      })
+    })
+    .catch(error => {
+      console.log('error', error.message);
+    });
+}
+
+_handleKeyDown = (e) => {
+  if (e.key === 'Enter') {
+    this.checkPlace(e.target.value);
+  }
+}
+
+parseValue = (x) => {
+  if(x!=""){
+    return x.toString().replace(".","").replace(/\B(?=(\d{3})+(?!\d))/g, "'") + " kr";
+  }else{
+    return "";
+  }
+}
 
 render() {
   return (
     <div>
-      <h2>microML</h2>
-      <div>
-        Rooms (<i>{this.state.json.rooms}</i>)
-        <br/>
-        <input type="range" min="1" max="20"  onChange={(e) => {this.handleChange(e)}} className="slider" id="rooms" />
+      <h2>Fastighetsvärdering</h2>
+      <div className="container">
+        <div className="containerSmall">
+          <b>Rum </b>
+          <small>{this.state.json.rooms} st</small>
+          <input className="dd" type="range" min="1" max="20"  onChange={(e) => {this.handleChange(e)}} id="rooms" />
+        </div>
 
-        Fee ({this.state.json.fee})
-        <br/>
-        <input type="range" min="0" max="10000"  onChange={(e) => {this.handleChange(e)}} className="slider" id="fee" />
+        <div className="containerSmall">
+          <b>Avgift </b>
+          <small>{this.state.json.fee}</small>
+          <input className="dd" type="range" min="0" max="10000"  onChange={(e) => {this.handleChange(e)}} id="fee" />
+          <br/>
+        </div>
 
-        Living space (<i>{this.state.json.living_space}</i>)
-        <br/>
-        <input type="range" min="0" max="600"  onChange={(e) => {this.handleChange(e)}} className="slider" id="living_space" />
+        <div className="containerSmall">
+          <b>m&sup2; </b>
+          <small>{this.state.json.living_space}</small>
+          <input className="dd" type="range" min="0" max="600"  onChange={(e) => {this.handleChange(e)}} id="living_space" />
+        </div>
 
-        Supplemental area (<i>{this.state.json.supplemental_area}</i>)
-        <br/>
-        <input type="range" min="0" max="600" onChange={(e) => {this.handleChange(e)}} className="slider" id="supplemental_area" />
+        <div className="containerSmall">
+          <b>Tilläggsområde </b>
+          <small>{this.state.json.supplemental_area}</small>
+          <input className="dd" type="range" min="0" max="600" onChange={(e) => {this.handleChange(e)}} id="supplemental_area" />
+        </div>
 
-        Floor (<i>{this.state.json.floor}</i>)
-        <br/>
-        <input type="range" min="0" max="10" onChange={(e) => {this.handleChange(e)}} className="slider" id="floor" />
+        <div className="containerSmall">
+          <b>Våning </b>
+          <small>{this.state.json.floor}</small>
+          <input className="dd" type="range" min="0" max="10" onChange={(e) => {this.handleChange(e)}} id="floor" />
+        </div>
 
-        Land area (<i>{this.state.json.land_area}</i>)
-        <br/>
-        <input type="text" max="1000000"  onChange={(e) => {this.handleChange(e)}} id="land_area" />
+        <div className="containerSmall">
+          <b>Mark </b>
+          <small className="small">{this.state.json.land_area}</small>
+          <input className="dd" type="range" max="1000"  onChange={(e) => {this.handleChange(e)}} id="land_area" />
+        </div>
 
         <br/>
-        Longitude (<i>{this.state.json.longitude}</i>)
+        <input type="text" onKeyDown={(e) => {this._handleKeyDown(e)}} id="location" placeholder="Ex. Stagneliusvägen 42"/>
         <br/>
-        <input type="text" onChange={(e) => {this.handleChange(e)}} id="longitude" />
-
-        <br/>
-        Latitude (<i>{this.state.json.latitude}</i>)
-        <br/>
-        <input type="text" onChange={(e) => {this.handleChange(e)}} id="latitude" />
-
-
+        <i>{this.state.loc}</i>
 
         <br/>
         <button onClick={() => {this.SubmitSolution()}} >Predict</button>
       </div>
       <br/>
-      <i>{this.state.result}</i>
+      <i className="value">{this.parseValue(this.state.result)}</i>
     </div>
   );
   }
